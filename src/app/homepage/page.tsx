@@ -149,6 +149,7 @@ export default function HomePage() {
             </dialog>
             {/* -------------------modal------------------- */}
 
+            {/* -------------------navbar------------------- */}
             <div className="navbar bg-base-300 flex justify-between">
                 <a className="btn btn-ghost text-xl">Inventory System</a>
                 <div className="flex gap-2 items-center">
@@ -156,6 +157,12 @@ export default function HomePage() {
                     <span className="text-sm">(Admin)</span>
                 </div>
             </div>
+            {/* -------------------navbar------------------- */}
+
+            <div className="container mx-auto px-4 py-4 text-right">
+                <button className="btn btn-primary">Add Product</button>
+            </div>
+
             <div className="container mx-auto px-4 overflow-x-auto">
                 <table className="table">
                     {/* head */}
