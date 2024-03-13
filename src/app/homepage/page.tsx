@@ -2,9 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { deleteProduct, getProducts, updateProduct } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
-import Image from "next/image";
 
 export default function HomePage() {
     const products: ProductType[] = useAppSelector(getProducts);
@@ -20,39 +19,48 @@ export default function HomePage() {
     }
     const [updateInput, setUpdateInput] = useState<ProductType>(defaultUpdateInput);
 
+    // Initialize state for selected option
+    const [page, setPage] = useState("1");
+
+    // Event handler to update selected option
+    const handleOptionChange = (e: any) => {
+        setPage(e.target.value);
+        dispatch(changeStatePagination())
+    };
+
     return (
         <div>
             {/* -------------------modal------------------- */}
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Update { updateInput.name }</h3>
+                    <h3 className="font-bold text-lg">Update {updateInput.name}</h3>
                     <div className="py-5 flex flex-col items-center gap-2">
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
                                 <span className="label-text">Product name</span>
                             </div>
-                            <input 
-                                type="text" 
-                                placeholder="Type here" 
+                            <input
+                                type="text"
+                                placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={ updateInput.name }
+                                value={updateInput.name}
                                 onChange={(e: FormEvent<HTMLInputElement>) => {
                                     const newValue = e.currentTarget.value;
                                     setUpdateInput(prev => ({
                                         ...prev,
                                         name: newValue,
                                     }))
-                                }} 
+                                }}
                             />
                         </label>
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
                                 <span className="label-text">Description</span>
                             </div>
-                            <textarea 
-                                placeholder="Type here" 
+                            <textarea
+                                placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={ updateInput.description }
+                                value={updateInput.description}
                                 onChange={(e: FormEvent<HTMLTextAreaElement>) => {
                                     const newValue = e.currentTarget.value;
                                     setUpdateInput(prev => ({
@@ -66,11 +74,11 @@ export default function HomePage() {
                             <div className="label">
                                 <span className="label-text">Price</span>
                             </div>
-                            <input 
-                                type="text" 
-                                placeholder="Type here" 
+                            <input
+                                type="text"
+                                placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={ updateInput.price }
+                                value={updateInput.price}
                                 onChange={(e: FormEvent<HTMLInputElement>) => {
                                     const newValue = e.currentTarget.value;
                                     setUpdateInput(prev => ({
@@ -84,11 +92,11 @@ export default function HomePage() {
                             <div className="label">
                                 <span className="label-text">Quantity</span>
                             </div>
-                            <input 
-                                type="text" 
-                                placeholder="Type here" 
+                            <input
+                                type="text"
+                                placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={ updateInput.quantity }
+                                value={updateInput.quantity}
                                 onChange={(e: FormEvent<HTMLInputElement>) => {
                                     const newValue = e.currentTarget.value;
                                     setUpdateInput(prev => ({
@@ -102,11 +110,11 @@ export default function HomePage() {
                             <div className="label">
                                 <span className="label-text">Image link</span>
                             </div>
-                            <input 
-                                type="text" 
-                                placeholder="Type here" 
+                            <input
+                                type="text"
+                                placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
-                                value={ updateInput.imagelink }
+                                value={updateInput.imagelink}
                                 onChange={(e: FormEvent<HTMLInputElement>) => {
                                     const newValue = e.currentTarget.value;
                                     setUpdateInput(prev => ({
@@ -121,14 +129,14 @@ export default function HomePage() {
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}
                             <div className="flex gap-5">
-                                <button 
+                                <button
                                     className="btn btn-primary"
                                     onClick={() => {
                                         dispatch(updateProduct(updateInput));
                                         setUpdateInput(defaultUpdateInput);
                                     }}
                                 >Update</button>
-                                <button 
+                                <button
                                     className="btn"
                                     onClick={() => {
                                         setUpdateInput(defaultUpdateInput);
@@ -186,8 +194,8 @@ export default function HomePage() {
                                     <td>{item.price}</td>
                                     <td>{item.quantity}</td>
                                     <td className="flex gap-5">
-                                        <button 
-                                            className="btn" 
+                                        <button
+                                            className="btn"
                                             onClick={() => {
                                                 setUpdateInput(item);
                                                 document.getElementById('my_modal_1').showModal()
@@ -216,12 +224,49 @@ export default function HomePage() {
 
                 </table>
             </div>
-            <div className="container mx-auto px-4 join">
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="1" checked />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="2" />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="3" />
-                <input className="join-item btn btn-square" type="radio" name="options" aria-label="4" />
+
+            {/* pagination */}
+            <div className="container mx-auto px-4 py-7 join flex justify-center">
+                {/* Radio buttons */}
+                <input
+                    className="join-item btn btn-square"
+                    type="radio"
+                    name="options"
+                    value="1"
+                    aria-label="1"
+                    checked={page === "1"}
+                    onChange={handleOptionChange}
+                />
+                <input
+                    className="join-item btn btn-square"
+                    type="radio"
+                    name="options"
+                    value="2"
+                    aria-label="2"
+                    checked={page === "2"}
+                    onChange={handleOptionChange}
+                />
+                <input
+                    className="join-item btn btn-square"
+                    type="radio"
+                    name="options"
+                    value="3"
+                    aria-label="3"
+                    checked={page === "3"}
+                    onChange={handleOptionChange}
+                />
+                <input
+                    className="join-item btn btn-square"
+                    type="radio"
+                    name="options"
+                    value="4"
+                    aria-label="4"
+                    checked={page === "4"}
+                    onChange={handleOptionChange}
+                />
             </div>
+            {/* pagination */}
+
         </div>
     )
 }
