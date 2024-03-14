@@ -316,7 +316,10 @@ export default function HomePage() {
                 <button 
                     className="btn btn-primary"
                     onClick={() => {
-                        document.getElementById('modal_add_product').showModal()
+                        const modal = document?.getElementById('modal_add_product')
+                        if(modal){
+                            modal.showModal();
+                        }
                     }}
                 >Add Product</button>
             </div>
@@ -364,7 +367,10 @@ export default function HomePage() {
                                                     className="btn"
                                                     onClick={() => {
                                                         setUpdateInput(item);
-                                                        document.getElementById('my_modal_1').showModal()
+                                                        const modal = document?.getElementById('my_modal_1');
+                                                        if(modal){
+                                                            modal.showModal();
+                                                        }
                                                     }}
                                                 >Update</button>
 
