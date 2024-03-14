@@ -26,6 +26,7 @@ const fakeProduct: ProductType[] = Array(20).fill(null).map((item) => ({
 export const loginRequest = createAsyncThunk("loginRequest", async ({ email, password }: any) => {
     const res = await fetch(`${process.env.serverUrl}/api/login`, {
         method: "POST",
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
