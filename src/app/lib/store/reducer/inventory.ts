@@ -95,7 +95,16 @@ export const deleteProductRequest = createAsyncThunk("deleteProduct", async ({ i
 export const inventorySlice = createSlice({
   name: "inventory",
   initialState: {
-    products: [],
+    products: [
+        {
+            id: "",
+            name: "",
+            description: "",
+            price: 0,
+            quantity: 0,
+            imagelink: "",
+        }
+    ],
     totalProduct: 0,
     isLoading: false,
     isError: false,
