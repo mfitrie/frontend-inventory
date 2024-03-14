@@ -338,7 +338,7 @@ export default function HomePage() {
                     </thead>
                     <tbody>
                         {
-                            products.map((item, index) => (
+                            products.map((item: ProductType, index) => (
                                 <tr key={index}>
                                     <td>
                                         <div className="flex items-center gap-3">
