@@ -2,8 +2,10 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
+import { faker } from "@faker-js/faker";
+
 
 export default function HomePage() {
     const { products, totalProduct } = useAppSelector(getState);
@@ -13,6 +15,7 @@ export default function HomePage() {
         dispatch(fetchProduct({ page: 1, pageSize: 10 }))
     }, [])
 
+
     const defaultUpdateInput: ProductType = {
         id: "",
         name: "",
@@ -21,7 +24,19 @@ export default function HomePage() {
         quantity: 0,
         imagelink: "",
     }
+
+    // add product input
+    const [addProductInput, setAddProductInput] = useState<ProductType>(defaultUpdateInput);
+    // add product input
+
+    // update product
     const [updateInput, setUpdateInput] = useState<ProductType>(defaultUpdateInput);
+    // update product
+
+    useEffect(() => {
+        console.log(addProductInput);
+    }, [addProductInput]);
+
 
     const [page, setPage] = useState("1");
     const handleOptionChange = (e: any) => {
@@ -32,7 +47,122 @@ export default function HomePage() {
 
     return (
         <div>
-            {/* -------------------modal------------------- */}
+            {/* -------------------modal add product------------------- */}
+            <dialog id="modal_add_product" className="modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Add Product</h3>
+                    <div className="py-5 flex flex-col items-center gap-2">
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">Product name</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Type here"
+                                className="input input-bordered w-full max-w-xs"
+                                value={addProductInput.name}
+                                onChange={(e: FormEvent<HTMLInputElement>) => {
+                                    const newValue = e.currentTarget.value;
+                                    setAddProductInput(prev => ({
+                                        ...prev,
+                                        name: newValue,
+                                    }))
+                                }}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">Description</span>
+                            </div>
+                            <textarea
+                                placeholder="Type here"
+                                className="input input-bordered w-full max-w-xs"
+                                value={addProductInput.description}
+                                onChange={(e: FormEvent<HTMLTextAreaElement>) => {
+                                    const newValue = e.currentTarget.value;
+                                    setAddProductInput(prev => ({
+                                        ...prev,
+                                        description: newValue,
+                                    }))
+                                }}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">Price</span>
+                            </div>
+                            <input
+                                type="number"
+                                placeholder="Type here"
+                                className="input input-bordered w-full max-w-xs"
+                                value={addProductInput.price}
+                                onChange={(e: FormEvent<HTMLInputElement>) => {
+                                    const newValue = e.currentTarget.value;
+                                    setAddProductInput(prev => ({
+                                        ...prev,
+                                        price: +newValue,
+                                    }))
+                                }}
+                            />
+                        </label>
+                        <label className="form-control w-full max-w-xs">
+                            <div className="label">
+                                <span className="label-text">Quantity</span>
+                            </div>
+                            <input
+                                type="number"
+                                placeholder="Type here"
+                                className="input input-bordered w-full max-w-xs"
+                                value={addProductInput.quantity}
+                                onChange={(e: FormEvent<HTMLInputElement>) => {
+                                    const newValue = e.currentTarget.value;
+                                    setAddProductInput(prev => ({
+                                        ...prev,
+                                        quantity: +newValue,
+                                    }))
+                                }}
+                            />
+                        </label>
+                    </div>
+                    <div className="modal-action">
+                        <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <div className="flex gap-5">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                        // dispatch(updateProductRequest(updateInput));
+                                        // dispatch(updateProduct(updateInput));
+                                        const fakeUUID = faker.string.uuid();
+
+                                        console.log("fakeUUID: ", fakeUUID)
+
+                                        setAddProductInput(prev => ({
+                                            ...prev,
+                                            id: fakeUUID,
+                                            imagelink: "https://loremflickr.com/640/480?lock=2220378856357888",
+                                        }));
+
+                                        dispatch(addProductRequest(addProductInput));
+
+                                        setAddProductInput(defaultUpdateInput);
+                                    }}
+                                >Add</button>
+                                <button
+                                    className="btn"
+                                    onClick={() => {
+                                        setAddProductInput(defaultUpdateInput);
+                                    }}
+                                >Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+            {/* -------------------modal add product------------------- */}
+            
+
+            {/* -------------------modal update------------------- */}
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Update {updateInput.name}</h3>
@@ -77,7 +207,7 @@ export default function HomePage() {
                                 <span className="label-text">Price</span>
                             </div>
                             <input
-                                type="text"
+                                type="number"
                                 placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
                                 value={updateInput.price}
@@ -95,7 +225,7 @@ export default function HomePage() {
                                 <span className="label-text">Quantity</span>
                             </div>
                             <input
-                                type="text"
+                                type="number"
                                 placeholder="Type here"
                                 className="input input-bordered w-full max-w-xs"
                                 value={updateInput.quantity}
@@ -134,6 +264,7 @@ export default function HomePage() {
                                 <button
                                     className="btn btn-primary"
                                     onClick={() => {
+                                        dispatch(updateProductRequest(updateInput));
                                         dispatch(updateProduct(updateInput));
                                         setUpdateInput(defaultUpdateInput);
                                     }}
@@ -149,7 +280,7 @@ export default function HomePage() {
                     </div>
                 </div>
             </dialog>
-            {/* -------------------modal------------------- */}
+            {/* -------------------modal update------------------- */}
 
             {/* -------------------navbar------------------- */}
             <div className="navbar bg-base-300 flex justify-between">
@@ -162,7 +293,12 @@ export default function HomePage() {
             {/* -------------------navbar------------------- */}
 
             <div className="container mx-auto px-4 py-4 text-right">
-                <button className="btn btn-primary">Add Product</button>
+                <button 
+                    className="btn btn-primary"
+                    onClick={() => {
+                        document.getElementById('modal_add_product').showModal()
+                    }}
+                >Add Product</button>
             </div>
 
             <div className="container mx-auto px-4 overflow-x-auto">
@@ -178,7 +314,6 @@ export default function HomePage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* row 1 */}
                         {
                             products.map((item, index) => (
                                 <tr key={index}>
@@ -210,7 +345,12 @@ export default function HomePage() {
                                                 document.getElementById('my_modal_1').showModal()
                                             }}
                                         >Update</button>
-                                        <button className="btn btn-error" onClick={() => dispatch(deleteProduct(item))}>Delete</button>
+                                        <button className="btn btn-error" onClick={() => {
+                                            dispatch(deleteProductRequest({
+                                                id: item.id
+                                            }))
+                                            dispatch(deleteProduct(item));
+                                        }}>Delete</button>
                                         {/* <button className="btn btn-error opacity-50 cursor-not-allowed">Delete</button> */}
                                     </td>
                                     {/* <th>

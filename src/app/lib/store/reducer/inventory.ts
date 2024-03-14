@@ -22,8 +22,52 @@ const fakeProduct: ProductType[] = Array(20).fill(null).map((item) => ({
 //     return res?.json();
 // });
 
+
+export const loginRequest = createAsyncThunk("loginRequest", async ({ email, password }: any) => {
+    const res = await fetch(`${process.env.serverUrl}/api/login`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email,
+            password,
+        })
+    });
+    return res?.json();
+});
+
 export const fetchProduct = createAsyncThunk("fetchProduct", async ({ page, pageSize }: any) => {
     const res = await fetch(`${process.env.serverUrl}/api/inventory?page=${page}&pageSize=${pageSize}`);
+    return res?.json();
+});
+
+export const addProductRequest = createAsyncThunk("addProductRequest", async (product: ProductType) => {
+    const res = await fetch(`${process.env.serverUrl}/api/add-inventory`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(product)
+    });
+    return res?.json();
+});
+
+export const updateProductRequest = createAsyncThunk("updateProductRequest", async (product: ProductType) => {
+    const res = await fetch(`${process.env.serverUrl}/api/update-inventory`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(product)
+    });
+    return res?.json();
+});
+
+export const deleteProductRequest = createAsyncThunk("deleteProduct", async ({ id }: any) => {
+    const res = await fetch(`${process.env.serverUrl}/api/delete-inventory/${id}`, {
+        method: "DELETE"
+    });
     return res?.json();
 });
 
@@ -87,25 +131,88 @@ export const inventorySlice = createSlice({
     //     console.log("rejected")
     // })
     // //------- Todos API
+
+
+    //------- login
+    builder.addCase(loginRequest.pending, (state, action) => {
+        console.log("loginRequest pending")
+    })
+    builder.addCase(loginRequest.fulfilled, (state, action) => {
+        console.log("loginRequest fulfilled")
+        console.log("payload: ", action.payload)
+
+        // state.products = action.payload.products;
+        // state.totalProduct = action.payload.total;
+    })
+    builder.addCase(loginRequest.rejected, (state, action) => {
+        console.log("loginRequest rejected")
+    })
+    //------- login
+
+
     //------- fetch product
     builder.addCase(fetchProduct.pending, (state, action) => {
-        // state.isLoading = true;
-        console.log("pending")
     })
     builder.addCase(fetchProduct.fulfilled, (state, action) => {
-        // state.isLoading = false;
-        // state.data = action.payload;
-        console.log("fulfilled")
         console.log("payload: ", action.payload)
 
         state.products = action.payload.products;
         state.totalProduct = action.payload.total;
     })
     builder.addCase(fetchProduct.rejected, (state, action) => {
-        // state.isError = true;
-        console.log("rejected")
     })
     //------- fetch product
+
+
+    //------- add product
+    builder.addCase(addProductRequest.pending, (state, action) => {
+        console.log("addProductRequest pending")
+    })
+    builder.addCase(addProductRequest.fulfilled, (state, action) => {
+        console.log("addProductRequest fulfilled")
+        console.log("payload: ", action.payload)
+
+        // state.products = action.payload.products;
+        // state.totalProduct = action.payload.total;
+    })
+    builder.addCase(addProductRequest.rejected, (state, action) => {
+        console.log("addProductRequest rejected")
+    })
+    //------- add product
+
+
+    //------- update product
+    builder.addCase(updateProductRequest.pending, (state, action) => {
+        console.log("updateProductRequest pending")
+    })
+    builder.addCase(updateProductRequest.fulfilled, (state, action) => {
+        console.log("updateProductRequest fulfilled")
+        console.log("payload: ", action.payload)
+
+        // state.products = action.payload.products;
+        // state.totalProduct = action.payload.total;
+    })
+    builder.addCase(updateProductRequest.rejected, (state, action) => {
+        console.log("updateProductRequest rejected")
+    })
+    //------- update product
+
+
+    //------- delete product
+    builder.addCase(deleteProductRequest.pending, (state, action) => {
+        console.log("deleteProductRequest pending")
+    })
+    builder.addCase(deleteProductRequest.fulfilled, (state, action) => {
+        console.log("deleteProductRequest fulfilled")
+        console.log("payload: ", action.payload)
+
+        // state.products = action.payload.products;
+        // state.totalProduct = action.payload.total;
+    })
+    builder.addCase(deleteProductRequest.rejected, (state, action) => {
+        console.log("deleteProductRequest rejected")
+    })
+    //------- delete product
    }
 })
 
