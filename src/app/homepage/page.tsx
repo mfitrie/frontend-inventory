@@ -1,13 +1,17 @@
 "use client"
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { changeStatePagination, deleteProduct, getProducts, updateProduct } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
 
 export default function HomePage() {
-    const products: ProductType[] = useAppSelector(getProducts);
+    const { products, totalProduct } = useAppSelector(getState);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchProduct({ page: 1, pageSize: 10 }))
+    }, [])
 
     const defaultUpdateInput: ProductType = {
         id: "",
@@ -19,13 +23,11 @@ export default function HomePage() {
     }
     const [updateInput, setUpdateInput] = useState<ProductType>(defaultUpdateInput);
 
-    // Initialize state for selected option
     const [page, setPage] = useState("1");
-
-    // Event handler to update selected option
     const handleOptionChange = (e: any) => {
-        setPage(e.target.value);
-        dispatch(changeStatePagination())
+        const page = e.target.value;
+        setPage(page);
+        dispatch(fetchProduct({ page, pageSize: 10 }));
     };
 
     return (
@@ -232,45 +234,24 @@ export default function HomePage() {
                 </table>
             </div>
 
+            {/* <span>{Math.round(totalProduct / 10)}</span> */}
             {/* pagination */}
-            <div className="container mx-auto px-4 py-7 join flex justify-center">
+            <div className="container mx-auto px-4 py-7 join flex justify-center overflow-x-auto">
                 {/* Radio buttons */}
-                <input
-                    className="join-item btn btn-square"
-                    type="radio"
-                    name="options"
-                    value="1"
-                    aria-label="1"
-                    checked={page === "1"}
-                    onChange={handleOptionChange}
-                />
-                <input
-                    className="join-item btn btn-square"
-                    type="radio"
-                    name="options"
-                    value="2"
-                    aria-label="2"
-                    checked={page === "2"}
-                    onChange={handleOptionChange}
-                />
-                <input
-                    className="join-item btn btn-square"
-                    type="radio"
-                    name="options"
-                    value="3"
-                    aria-label="3"
-                    checked={page === "3"}
-                    onChange={handleOptionChange}
-                />
-                <input
-                    className="join-item btn btn-square"
-                    type="radio"
-                    name="options"
-                    value="4"
-                    aria-label="4"
-                    checked={page === "4"}
-                    onChange={handleOptionChange}
-                />
+                {
+                    Array(Math.round(totalProduct / 10)).fill(null).map((item, index) => (
+                        <input
+                            key={ index }
+                            className="join-item btn btn-square"
+                            type="radio"
+                            name="options"
+                            value={ (index + 1) + "" }
+                            aria-label={ (index + 1) + "" }
+                            checked={page === (index + 1) + ""}
+                            onChange={handleOptionChange}
+                        />
+                    ))
+                }
             </div>
             {/* pagination */}
 
