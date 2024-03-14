@@ -31,7 +31,7 @@ export default function Home() {
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body items-center">
           <h2 className="card-title">Inventory System Login</h2>
-          <p>If a dog chews shoes whose shoes does he choose?</p>
+          <p className="text-center">The inventory system keeps track of goods or products in stock</p>
 
           <div className="mt-4 flex flex-col gap-3">
             <label className="input input-bordered flex items-center gap-2">

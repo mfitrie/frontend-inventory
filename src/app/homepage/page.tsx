@@ -21,12 +21,10 @@ export default function HomePage() {
           return;
         }
 
-    }, []);
-
-    useEffect(() => {
         dispatch(fetchUser());
         dispatch(fetchProduct({ page: 1, pageSize: 10 }));
-    }, [])
+
+    }, []);
 
 
     // add product input
@@ -307,7 +305,7 @@ export default function HomePage() {
                         onClick={() => {
                             // dispatch(logoutRequest());
                             cookies.remove("access_token");
-                            // router.push("/");
+                            router.push("/");
                         }}
                     >Logout</button>
                 </div>
