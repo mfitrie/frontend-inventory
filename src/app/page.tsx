@@ -1,14 +1,25 @@
 "use client"
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./lib/store/hooks";
 import { getProducts, loginRequest } from "./lib/store/reducer/inventory";
 import { useRouter, usePathname } from 'next/navigation';
+import cookies from "js-cookie"
 
 export default function Home() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   
+  useEffect(() => {
+    const token = cookies.get('access_token');
+    
+    if (token) {
+      router.push("/homepage");
+      return;
+    }
+
+  }, []);
+
   const defaultLoginInput = {
     email: "",
     password: "",
@@ -60,7 +71,7 @@ export default function Home() {
             <button className="btn btn-primary" onClick={() => {
               dispatch(loginRequest(inputLogin));
               setInputLogin(defaultLoginInput);
-              // router.push("/homepage");
+              router.push("/homepage");
             }}>Login</button>
           </div>
 

@@ -2,7 +2,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AppState } from "../store";
 import { faker } from "@faker-js/faker";
 import { ProductType } from "@/app/types/product.type";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
 
@@ -38,8 +37,22 @@ export const loginRequest = createAsyncThunk("loginRequest", async ({ email, pas
     return res?.json();
 });
 
+export const logoutRequest = createAsyncThunk("logoutRequest", async () => {
+    const res = await fetch(`${process.env.serverUrl}/api/logout`);
+    return res?.json();
+});
+
+export const fetchUser = createAsyncThunk("fetchUser", async () => {
+    const res = await fetch(`${process.env.serverUrl}/api/user`, {
+        credentials: 'include',
+    });
+    return res?.json();
+});
+
 export const fetchProduct = createAsyncThunk("fetchProduct", async ({ page, pageSize }: any) => {
-    const res = await fetch(`${process.env.serverUrl}/api/inventory?page=${page}&pageSize=${pageSize}`);
+    const res = await fetch(`${process.env.serverUrl}/api/inventory?page=${page}&pageSize=${pageSize}`, {
+        credentials: 'include',
+    });
     return res?.json();
 });
 
@@ -49,6 +62,7 @@ export const addProductRequest = createAsyncThunk("addProductRequest", async (pr
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
             ...product,
             id: faker.string.uuid(),
@@ -63,6 +77,7 @@ export const updateProductRequest = createAsyncThunk("updateProductRequest", asy
         headers: {
             'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify(product)
     });
     return res?.json();
@@ -70,7 +85,8 @@ export const updateProductRequest = createAsyncThunk("updateProductRequest", asy
 
 export const deleteProductRequest = createAsyncThunk("deleteProduct", async ({ id }: any) => {
     const res = await fetch(`${process.env.serverUrl}/api/delete-inventory/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: 'include',
     });
     return res?.json();
 });
@@ -82,7 +98,16 @@ export const inventorySlice = createSlice({
     products: [],
     totalProduct: 0,
     isLoading: false,
-    isError: false
+    isError: false,
+    user: {
+        "id": "",
+        "name": "",
+        "phoneno": "",
+        "address": "",
+        "email": "",
+        "password": "",
+        "isadmin": false
+    },
     // data: [],
   },
   reducers: {
@@ -152,6 +177,37 @@ export const inventorySlice = createSlice({
         console.log("loginRequest rejected")
     })
     //------- login
+
+
+    //------- Logout
+    builder.addCase(logoutRequest.pending, (state, action) => {
+        console.log("logoutRequest pending")
+    })
+    builder.addCase(logoutRequest.fulfilled, (state, action) => {
+        console.log("logoutRequest fulfilled")
+        console.log("payload: ", action.payload)
+
+        // state.products = action.payload.products;
+        // state.totalProduct = action.payload.total;
+    })
+    builder.addCase(logoutRequest.rejected, (state, action) => {
+        console.log("logoutRequest rejected")
+    })
+    //------- Logout
+
+
+    //------- fetch user
+     builder.addCase(fetchUser.pending, (state, action) => {
+
+     })
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+        console.log("payload user: ", action.payload)
+
+        state.user = action.payload;
+    })
+    builder.addCase(fetchUser.rejected, (state, action) => {
+    })
+    //------- fetch user
 
 
     //------- fetch product
