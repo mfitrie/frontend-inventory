@@ -12,10 +12,23 @@ export default function HomePage() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(fetchProduct({ page: 1, pageSize: 10 }))
+        dispatch(fetchProduct({ page: 1, pageSize: 10 }));
     }, [])
 
 
+    // add product input
+    const defaultAddInput: ProductType = {
+        id: "",
+        name: "",
+        description: "",
+        price: 0,
+        quantity: 0,
+        imagelink: "https://loremflickr.com/640/480?lock=2220378856357888",
+    }
+    const [addProductInput, setAddProductInput] = useState<ProductType>(defaultAddInput);
+    // add product input
+
+    // update product
     const defaultUpdateInput: ProductType = {
         id: "",
         name: "",
@@ -24,12 +37,6 @@ export default function HomePage() {
         quantity: 0,
         imagelink: "",
     }
-
-    // add product input
-    const [addProductInput, setAddProductInput] = useState<ProductType>(defaultUpdateInput);
-    // add product input
-
-    // update product
     const [updateInput, setUpdateInput] = useState<ProductType>(defaultUpdateInput);
     // update product
 
@@ -131,27 +138,19 @@ export default function HomePage() {
                                 <button
                                     className="btn btn-primary"
                                     onClick={() => {
-                                        // dispatch(updateProductRequest(updateInput));
-                                        // dispatch(updateProduct(updateInput));
-                                        const fakeUUID = faker.string.uuid();
-
-                                        console.log("fakeUUID: ", fakeUUID)
-
                                         setAddProductInput(prev => ({
                                             ...prev,
-                                            id: fakeUUID,
-                                            imagelink: "https://loremflickr.com/640/480?lock=2220378856357888",
                                         }));
 
                                         dispatch(addProductRequest(addProductInput));
 
-                                        setAddProductInput(defaultUpdateInput);
+                                        setAddProductInput(defaultAddInput);
                                     }}
                                 >Add</button>
                                 <button
                                     className="btn"
                                     onClick={() => {
-                                        setAddProductInput(defaultUpdateInput);
+                                        setAddProductInput(defaultAddInput);
                                     }}
                                 >Close</button>
                             </div>

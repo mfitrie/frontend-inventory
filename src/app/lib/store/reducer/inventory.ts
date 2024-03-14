@@ -48,7 +48,10 @@ export const addProductRequest = createAsyncThunk("addProductRequest", async (pr
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(product)
+        body: JSON.stringify({
+            ...product,
+            id: faker.string.uuid(),
+        })
     });
     return res?.json();
 });
