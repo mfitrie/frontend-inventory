@@ -316,7 +316,7 @@ export default function HomePage() {
                 <button 
                     className="btn btn-primary"
                     onClick={() => {
-                        const modal = document?.getElementById('modal_add_product')
+                        const modal = document?.getElementById('modal_add_product') as HTMLDialogElement | null
                         if(modal){
                             modal.showModal();
                         }
@@ -367,7 +367,7 @@ export default function HomePage() {
                                                     className="btn"
                                                     onClick={() => {
                                                         setUpdateInput(item);
-                                                        const modal = document?.getElementById('my_modal_1');
+                                                        const modal = document?.getElementById('my_modal_1') as HTMLDialogElement | null;
                                                         if(modal){
                                                             modal.showModal();
                                                         }
