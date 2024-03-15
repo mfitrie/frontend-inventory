@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, fetchUser, fetchOneProduct } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, fetchUser, fetchOneProduct, sortByNameProductsCurrentPage } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
 import { useRouter } from 'next/navigation';
 import cookies from "js-cookie"
@@ -29,6 +29,8 @@ export default function HomePage() {
     useEffect(() => {
         dispatch(fetchProduct({ page: 1, pageSize: 10 }));
     }, []);
+
+    const [isProductSortAsc, setIsProductSortAsc] = useState<boolean>(true);
 
 
     // add product input
@@ -339,15 +341,25 @@ export default function HomePage() {
 
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <span>Total product: { totalProduct }</span>
-                <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                        const modal = document?.getElementById('modal_add_product') as HTMLDialogElement | null
-                        if (modal) {
-                            modal.showModal();
-                        }
-                    }}
-                >Add Product</button>
+                <div className="flex gap-5">
+                    <button 
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            setIsProductSortAsc(!isProductSortAsc);
+                            dispatch(sortByNameProductsCurrentPage(isProductSortAsc));
+                        }}
+                    >Sort by name { isProductSortAsc ? "asc" : "desc" }</button>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                            const modal = document?.getElementById('modal_add_product') as HTMLDialogElement | null
+                            if (modal) {
+                                modal.showModal();
+                            }
+                        }}
+                    >Add Product</button>
+
+                </div>
             </div>
 
             <div className="container mx-auto px-4 overflow-x-auto">

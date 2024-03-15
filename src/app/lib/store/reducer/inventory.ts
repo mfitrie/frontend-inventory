@@ -140,6 +140,29 @@ export const inventorySlice = createSlice({
             imagelink: faker.image.url(),
         }))
     },
+    sortByNameProductsCurrentPage(state, action: PayloadAction<boolean>){
+        const isAscending = action.payload;
+        
+        state.products.sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+
+            if(isAscending){
+                if(nameA < nameB) return -1;
+                if(nameA > nameB) return 1;
+
+                return 0;
+            }else {
+                if(nameA > nameB) return -1;
+                if(nameA < nameB) return 1;
+                
+                return 0;
+            }
+        });
+
+        return state;
+
+    },
     updateProduct(state, action: PayloadAction<ProductType>){
         const { id, ...rest } = action.payload;
         state.products = state.products.map(item => {
@@ -311,6 +334,7 @@ export const inventorySlice = createSlice({
 
 export const {
     changeStatePagination,
+    sortByNameProductsCurrentPage,
     updateProduct,
     deleteProduct,
 } = inventorySlice.actions;
