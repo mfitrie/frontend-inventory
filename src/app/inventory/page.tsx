@@ -36,8 +36,8 @@ export default function HomePage() {
         id: "",
         name: "",
         description: "",
-        price: 0,
-        quantity: 0,
+        price: "",
+        quantity: "",
         imagelink: "https://loremflickr.com/640/480?lock=2220378856357888",
     }
     const [addProductInput, setAddProductInput] = useState<ProductType>(defaultAddInput);
@@ -48,8 +48,8 @@ export default function HomePage() {
         id: "",
         name: "",
         description: "",
-        price: 0,
-        quantity: 0,
+        price: "",
+        quantity: "",
         imagelink: "",
     }
     const [updateInput, setUpdateInput] = useState<ProductType>(defaultUpdateInput);
