@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 export default function Product() {
     const product = useAppSelector((state: AppState) => state.inventory.product);
     const path = usePathname();
+    const router = useRouter();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -25,7 +26,12 @@ export default function Product() {
         <div className='h-screen '>
             {/* -------------------navbar------------------- */}
             <div className="navbar bg-base-300">
-                <a className="btn btn-ghost text-xl">Inventory System</a>
+                <a 
+                    className="btn btn-ghost text-xl"
+                    onClick={ () => {
+                        router.push("/inventory")
+                    } }
+                >Inventory System</a>
             </div>
             {/* -------------------navbar------------------- */}
             <div className='container mx-auto px-4 h-5/6 flex justify-center items-center'>
