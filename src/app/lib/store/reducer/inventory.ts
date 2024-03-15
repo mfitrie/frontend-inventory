@@ -52,6 +52,11 @@ export const fetchProduct = createAsyncThunk("fetchProduct", async ({ page, page
     return res?.json();
 });
 
+export const fetchOneProduct = createAsyncThunk("fetchOneProduct", async ({ id }: any) => {
+    const res = await fetch(`${process.env.serverUrl}/api/inventory/${id}`);
+    return res?.json();
+});
+
 export const addProductRequest = createAsyncThunk("addProductRequest", async (product: ProductType) => {
     const res = await fetch(`${process.env.serverUrl}/api/add-inventory`, {
         method: "POST",
@@ -110,6 +115,14 @@ export const inventorySlice = createSlice({
         "password": "",
         "isadmin": false
     },
+    product: {
+        id: "",
+        name: "",
+        description: "",
+        price: 0,
+        quantity: 0,
+        imagelink: "",
+    }
     // data: [],
   },
   reducers: {
@@ -224,6 +237,20 @@ export const inventorySlice = createSlice({
     builder.addCase(fetchProduct.rejected, (state, action) => {
     })
     //------- fetch product
+
+
+    //------- fetch one product
+    builder.addCase(fetchOneProduct.pending, (state, action) => {
+    })
+    builder.addCase(fetchOneProduct.fulfilled, (state, action) => {
+        console.log("fetchOneProduct payload: ", action.payload)
+
+        state.product = action.payload[0];
+
+    })
+    builder.addCase(fetchOneProduct.rejected, (state, action) => {
+    })
+    //------- fetch one product
 
 
     //------- add product

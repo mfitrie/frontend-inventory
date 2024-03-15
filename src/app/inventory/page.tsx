@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, fetchUser } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, fetchUser, fetchOneProduct } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
 import { useRouter } from 'next/navigation';
 import cookies from "js-cookie"
@@ -330,11 +330,19 @@ export default function HomePage() {
                         {
                             products.map((item: ProductType, index) => (
                                 <tr key={index}>
-                                    <td>
+                                    <td 
+                                        className="cursor-pointer hover:bg-slate-200"
+                                        onClick={() => {
+                                            dispatch(fetchOneProduct({
+                                                id: item.id,
+                                            }))
+                                            router.push(`/inventory/${item.id}`);
+                                        }}
+                                    >
                                         <div className="flex items-center gap-3">
                                             <div className="avatar">
                                                 <div className="mask mask-squircle w-12 h-12">
-                                                    <img src={item.imagelink} alt="Avatar Tailwind CSS Component" />
+                                                    <img src={item.imagelink} alt="product-image" />
                                                 </div>
                                             </div>
                                             <div>
