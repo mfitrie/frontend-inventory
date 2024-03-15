@@ -20,7 +20,7 @@ export default function Home() {
   // }, []);
 
   useEffect(() => {
-      router.push("/homepage");
+      router.push("/inventory");
   }, []);
 
   const defaultLoginInput = {
