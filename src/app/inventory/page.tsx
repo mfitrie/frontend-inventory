@@ -61,17 +61,22 @@ export default function HomePage() {
 
 
     //----- pagination
-    // const [page, setPage] = useState("1");
-    // const handleOptionChange = (e: any) => {
-    //     const page = e.target.value;
-    //     setPage(page);
-    //     dispatch(fetchProduct({ page, pageSize: 10 }));
-    // };
-
-    // Initialize state for the current page
     const [currentPage, setCurrentPage] = useState(1);
+    
+    const goToFirstPage = () => {
+        setCurrentPage(1);
+        dispatch(fetchProduct({ page: 1, pageSize: 10 }));
+    }
 
-    // Function to handle clicking the previous page button
+    const goToLastPage = () => {
+        setCurrentPage((prev) => {
+            const newPage = Math.ceil((totalProduct / 10));
+            dispatch(fetchProduct({ page: newPage, pageSize: 10 }));
+
+            return newPage;
+        });
+    }
+
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => {
             const currentPage = Math.max(prevPage - 1, 1); 
@@ -80,7 +85,6 @@ export default function HomePage() {
         });
     };
 
-    // Function to handle clicking the next page button
     const goToNextPage = () => {
         setCurrentPage((prevPage) => {
             const newPrevPage = prevPage + 1
@@ -89,7 +93,6 @@ export default function HomePage() {
         });
     };
 
-    // Function to handle clicking a specific page button
     const goToPage = (pageNumber: number) => {
         setCurrentPage(pageNumber => {
             dispatch(fetchProduct({ page: currentPage, pageSize: 10 }));
@@ -440,30 +443,13 @@ export default function HomePage() {
 
 
             {/* pagination */}
-
-            {/* <div className="container mx-auto px-4 py-7 join flex justify-center overflow-x-auto">
-                {
-                    Array(Math.round(totalProduct / 10)).fill(null).map((item, index) => (
-                        <input
-                            key={ index }
-                            className="join-item btn btn-square"
-                            type="radio"
-                            name="options"
-                            value={ (index + 1) + "" }
-                            aria-label={ (index + 1) + "" }
-                            checked={page === (index + 1) + ""}
-                            onChange={handleOptionChange}
-                        />
-                    ))
-                }
-            </div> */}
-
             <div className="container mx-auto px-4 py-7 join flex justify-center">
+                <button className="join-item btn" onClick={ goToFirstPage }>First Page</button>
                 <button className="join-item btn" onClick={ goToPreviousPage }>«</button>
                 <button className="join-item btn" onClick={ () => goToPage(currentPage) }>Page { currentPage }</button>
                 <button className="join-item btn" onClick={ goToNextPage }>»</button>
+                <button className="join-item btn" onClick={ goToLastPage }>Last Page</button>
             </div>
-
             {/* pagination */}
 
         </div>
