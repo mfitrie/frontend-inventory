@@ -15,7 +15,7 @@ export default function HomePage() {
 
     // useEffect(() => {
     //     const token = cookies.get('access_token');
-        
+
     //     if (!token) {
     //       router.push("/");
     //       return;
@@ -60,12 +60,44 @@ export default function HomePage() {
     // }, [addProductInput]);
 
 
-    const [page, setPage] = useState("1");
-    const handleOptionChange = (e: any) => {
-        const page = e.target.value;
-        setPage(page);
-        dispatch(fetchProduct({ page, pageSize: 10 }));
+    //----- pagination
+    // const [page, setPage] = useState("1");
+    // const handleOptionChange = (e: any) => {
+    //     const page = e.target.value;
+    //     setPage(page);
+    //     dispatch(fetchProduct({ page, pageSize: 10 }));
+    // };
+
+    // Initialize state for the current page
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Function to handle clicking the previous page button
+    const goToPreviousPage = () => {
+        setCurrentPage((prevPage) => {
+            const currentPage = Math.max(prevPage - 1, 1); 
+            dispatch(fetchProduct({ page: currentPage, pageSize: 10 }));
+            return currentPage;
+        });
     };
+
+    // Function to handle clicking the next page button
+    const goToNextPage = () => {
+        setCurrentPage((prevPage) => {
+            const newPrevPage = prevPage + 1
+            dispatch(fetchProduct({ page: newPrevPage, pageSize: 10 }));
+            return newPrevPage;
+        });
+    };
+
+    // Function to handle clicking a specific page button
+    const goToPage = (pageNumber: number) => {
+        setCurrentPage(pageNumber => {
+            dispatch(fetchProduct({ page: currentPage, pageSize: 10 }));
+            return pageNumber;
+        });
+    };
+    //----- pagination
+
 
     return (
         <div>
@@ -174,7 +206,7 @@ export default function HomePage() {
                 </div>
             </dialog>
             {/* -------------------modal add product------------------- */}
-            
+
 
             {/* -------------------modal update------------------- */}
             <dialog id="my_modal_1" className="modal">
@@ -302,12 +334,13 @@ export default function HomePage() {
             </div>
             {/* -------------------navbar------------------- */}
 
-            <div className="container mx-auto px-4 py-4 text-right">
-                <button 
+            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+                <span>Total product: { totalProduct }</span>
+                <button
                     className="btn btn-primary"
                     onClick={() => {
                         const modal = document?.getElementById('modal_add_product') as HTMLDialogElement | null
-                        if(modal){
+                        if (modal) {
                             modal.showModal();
                         }
                     }}
@@ -330,7 +363,7 @@ export default function HomePage() {
                         {
                             products.map((item: ProductType, index) => (
                                 <tr key={index}>
-                                    <td 
+                                    <td
                                         className="cursor-pointer hover:bg-slate-200"
                                         onClick={() => {
                                             dispatch(fetchOneProduct({
@@ -364,7 +397,7 @@ export default function HomePage() {
                                             onClick={() => {
                                                 setUpdateInput(item);
                                                 const modal = document?.getElementById('my_modal_1') as HTMLDialogElement | null;
-                                                if(modal){
+                                                if (modal) {
                                                     modal.showModal();
                                                 }
                                             }}
@@ -397,10 +430,10 @@ export default function HomePage() {
                 </table>
             </div>
 
-            {/* <span>{Math.round(totalProduct / 10)}</span> */}
+
             {/* pagination */}
-            <div className="container mx-auto px-4 py-7 join flex justify-center overflow-x-auto">
-                {/* Radio buttons */}
+
+            {/* <div className="container mx-auto px-4 py-7 join flex justify-center overflow-x-auto">
                 {
                     Array(Math.round(totalProduct / 10)).fill(null).map((item, index) => (
                         <input
@@ -415,7 +448,14 @@ export default function HomePage() {
                         />
                     ))
                 }
+            </div> */}
+
+            <div className="container mx-auto px-4 py-7 join flex justify-center">
+                <button className="join-item btn" onClick={ goToPreviousPage }>«</button>
+                <button className="join-item btn" onClick={ () => goToPage(currentPage) }>Page { currentPage }</button>
+                <button className="join-item btn" onClick={ goToNextPage }>»</button>
             </div>
+
             {/* pagination */}
 
         </div>

@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { AppState } from "../store";
 import { faker } from "@faker-js/faker";
 import { ProductType } from "@/app/types/product.type";
+import { stat } from "fs";
 
 
 
@@ -261,8 +262,11 @@ export const inventorySlice = createSlice({
         console.log("addProductRequest fulfilled")
         console.log("payload: ", action.payload)
 
-        // state.products = action.payload.products;
-        // state.totalProduct = action.payload.total;
+        return {
+            ...state,
+            totalProduct: state.totalProduct + 1,
+        };
+
     })
     builder.addCase(addProductRequest.rejected, (state, action) => {
         console.log("addProductRequest rejected")
