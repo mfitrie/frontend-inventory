@@ -384,7 +384,15 @@ export default function HomePage() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td
+                                        className="cursor-pointer hover:bg-slate-200"
+                                        onClick={() => {
+                                            dispatch(fetchOneProduct({
+                                                id: item.id,
+                                            }))
+                                            router.push(`/inventory/${item.id}`);
+                                        }}
+                                    >
                                         {item.description}
                                         {/* <br />
                                         <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
