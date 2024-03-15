@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, logoutRequest, fetchUser } from "../lib/store/reducer/inventory";
+import { changeStatePagination, deleteProduct, getProducts, updateProduct, getState, fetchProduct, deleteProductRequest, updateProductRequest, addProductRequest, fetchUser } from "../lib/store/reducer/inventory";
 import { ProductType } from "../types/product.type";
 import { useRouter } from 'next/navigation';
 import cookies from "js-cookie"
@@ -13,17 +13,21 @@ export default function HomePage() {
     const { user, products, totalProduct } = useAppSelector(getState);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        const token = cookies.get('access_token');
+    // useEffect(() => {
+    //     const token = cookies.get('access_token');
         
-        if (!token) {
-          router.push("/");
-          return;
-        }
+    //     if (!token) {
+    //       router.push("/");
+    //       return;
+    //     }
 
-        dispatch(fetchUser());
+    //     dispatch(fetchUser());
+    //     dispatch(fetchProduct({ page: 1, pageSize: 10 }));
+
+    // }, []);
+
+    useEffect(() => {
         dispatch(fetchProduct({ page: 1, pageSize: 10 }));
-
     }, []);
 
 
@@ -293,22 +297,8 @@ export default function HomePage() {
             {/* -------------------modal update------------------- */}
 
             {/* -------------------navbar------------------- */}
-            <div className="navbar bg-base-300 flex justify-between">
+            <div className="navbar bg-base-300">
                 <a className="btn btn-ghost text-xl">Inventory System</a>
-                <div className="flex flex-row gap-7">
-                    <div className="flex gap-2 items-center">
-                        <span className="text-base font-bold">{ user?.name }</span>
-                        <span className="text-sm">{ user?.isadmin ? `(Admin)` : `(Guest)`}</span>
-                    </div>
-                    <button 
-                        className="btn btn-error"
-                        onClick={() => {
-                            // dispatch(logoutRequest());
-                            cookies.remove("access_token");
-                            router.push("/");
-                        }}
-                    >Logout</button>
-                </div>
             </div>
             {/* -------------------navbar------------------- */}
 
@@ -361,40 +351,22 @@ export default function HomePage() {
                                     <td>{item.price}</td>
                                     <td>{item.quantity}</td>
                                     <td className="flex gap-5">
-                                        {
-                                            user?.isadmin ? (
-                                                <button
-                                                    className="btn"
-                                                    onClick={() => {
-                                                        setUpdateInput(item);
-                                                        const modal = document?.getElementById('my_modal_1') as HTMLDialogElement | null;
-                                                        if(modal){
-                                                            modal.showModal();
-                                                        }
-                                                    }}
-                                                >Update</button>
-
-                                            )
-                                            :
-                                            (
-                                                <button className="btn opacity-50 cursor-not-allowed">Delete</button>
-                                            )
-                                        }
-                                        {
-                                            user?.isadmin ? (
-                                                <button className="btn btn-error" onClick={() => {
-                                                    dispatch(deleteProductRequest({
-                                                        id: item.id
-                                                    }))
-                                                    dispatch(deleteProduct(item));
-                                                }}>Delete</button>
-
-                                            )
-                                            :
-                                            (
-                                                <button className="btn btn-error opacity-50 cursor-not-allowed">Delete</button>
-                                            )
-                                        }
+                                        <button
+                                            className="btn"
+                                            onClick={() => {
+                                                setUpdateInput(item);
+                                                const modal = document?.getElementById('my_modal_1') as HTMLDialogElement | null;
+                                                if(modal){
+                                                    modal.showModal();
+                                                }
+                                            }}
+                                        >Update</button>
+                                        <button className="btn btn-error" onClick={() => {
+                                            dispatch(deleteProductRequest({
+                                                id: item.id
+                                            }))
+                                            dispatch(deleteProduct(item));
+                                        }}>Delete</button>
                                     </td>
                                     {/* <th>
                                         <button className="btn btn-ghost btn-xs">details</button>

@@ -22,37 +22,33 @@ const fakeProduct: ProductType[] = Array(20).fill(null).map((item) => ({
 // });
 
 
-export const loginRequest = createAsyncThunk("loginRequest", async ({ email, password }: any) => {
-    const res = await fetch(`${process.env.serverUrl}/api/login`, {
-        method: "POST",
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            email,
-            password,
-        })
-    });
-    return res?.json();
-});
+// export const loginRequest = createAsyncThunk("loginRequest", async ({ email, password }: any) => {
+//     const res = await fetch(`${process.env.serverUrl}/api/login`, {
+//         method: "POST",
+//         credentials: 'include',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             email,
+//             password,
+//         })
+//     });
+//     return res?.json();
+// });
 
-export const logoutRequest = createAsyncThunk("logoutRequest", async () => {
-    const res = await fetch(`${process.env.serverUrl}/api/logout`);
-    return res?.json();
-});
+// export const logoutRequest = createAsyncThunk("logoutRequest", async () => {
+//     const res = await fetch(`${process.env.serverUrl}/api/logout`);
+//     return res?.json();
+// });
 
 export const fetchUser = createAsyncThunk("fetchUser", async () => {
-    const res = await fetch(`${process.env.serverUrl}/api/user`, {
-        credentials: 'include',
-    });
+    const res = await fetch(`${process.env.serverUrl}/api/user`);
     return res?.json();
 });
 
 export const fetchProduct = createAsyncThunk("fetchProduct", async ({ page, pageSize }: any) => {
-    const res = await fetch(`${process.env.serverUrl}/api/inventory?page=${page}&pageSize=${pageSize}`, {
-        credentials: 'include',
-    });
+    const res = await fetch(`${process.env.serverUrl}/api/inventory?page=${page}&pageSize=${pageSize}`);
     return res?.json();
 });
 
@@ -62,7 +58,6 @@ export const addProductRequest = createAsyncThunk("addProductRequest", async (pr
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include',
         body: JSON.stringify({
             ...product,
             id: faker.string.uuid(),
@@ -77,7 +72,6 @@ export const updateProductRequest = createAsyncThunk("updateProductRequest", asy
         headers: {
             'Content-Type': 'application/json'
         },
-        credentials: 'include',
         body: JSON.stringify(product)
     });
     return res?.json();
@@ -86,7 +80,6 @@ export const updateProductRequest = createAsyncThunk("updateProductRequest", asy
 export const deleteProductRequest = createAsyncThunk("deleteProduct", async ({ id }: any) => {
     const res = await fetch(`${process.env.serverUrl}/api/delete-inventory/${id}`, {
         method: "DELETE",
-        credentials: 'include',
     });
     return res?.json();
 });
@@ -171,38 +164,38 @@ export const inventorySlice = createSlice({
     // //------- Todos API
 
 
-    //------- login
-    builder.addCase(loginRequest.pending, (state, action) => {
-        console.log("loginRequest pending")
-    })
-    builder.addCase(loginRequest.fulfilled, (state, action) => {
-        console.log("loginRequest fulfilled")
-        console.log("payload: ", action.payload)
+    // //------- login
+    // builder.addCase(loginRequest.pending, (state, action) => {
+    //     console.log("loginRequest pending")
+    // })
+    // builder.addCase(loginRequest.fulfilled, (state, action) => {
+    //     console.log("loginRequest fulfilled")
+    //     console.log("payload: ", action.payload)
 
-        // state.products = action.payload.products;
-        // state.totalProduct = action.payload.total;
-    })
-    builder.addCase(loginRequest.rejected, (state, action) => {
-        console.log("loginRequest rejected")
-    })
-    //------- login
+    //     // state.products = action.payload.products;
+    //     // state.totalProduct = action.payload.total;
+    // })
+    // builder.addCase(loginRequest.rejected, (state, action) => {
+    //     console.log("loginRequest rejected")
+    // })
+    // //------- login
 
 
-    //------- Logout
-    builder.addCase(logoutRequest.pending, (state, action) => {
-        console.log("logoutRequest pending")
-    })
-    builder.addCase(logoutRequest.fulfilled, (state, action) => {
-        console.log("logoutRequest fulfilled")
-        console.log("payload: ", action.payload)
+    // //------- Logout
+    // builder.addCase(logoutRequest.pending, (state, action) => {
+    //     console.log("logoutRequest pending")
+    // })
+    // builder.addCase(logoutRequest.fulfilled, (state, action) => {
+    //     console.log("logoutRequest fulfilled")
+    //     console.log("payload: ", action.payload)
 
-        // state.products = action.payload.products;
-        // state.totalProduct = action.payload.total;
-    })
-    builder.addCase(logoutRequest.rejected, (state, action) => {
-        console.log("logoutRequest rejected")
-    })
-    //------- Logout
+    //     // state.products = action.payload.products;
+    //     // state.totalProduct = action.payload.total;
+    // })
+    // builder.addCase(logoutRequest.rejected, (state, action) => {
+    //     console.log("logoutRequest rejected")
+    // })
+    // //------- Logout
 
 
     //------- fetch user

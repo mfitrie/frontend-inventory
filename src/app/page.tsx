@@ -2,22 +2,25 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./lib/store/hooks";
-import { getProducts, loginRequest } from "./lib/store/reducer/inventory";
+import { getProducts } from "./lib/store/reducer/inventory";
 import { useRouter, usePathname } from 'next/navigation';
 import cookies from "js-cookie"
 
 export default function Home() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
   
-  useEffect(() => {
-    const token = cookies.get('access_token');
+  // useEffect(() => {
+  //   const token = cookies.get('access_token');
     
-    if (token) {
-      router.push("/homepage");
-      return;
-    }
+  //   if (token) {
+  //     router.push("/homepage");
+  //     return;
+  //   }
 
+  // }, []);
+
+  useEffect(() => {
+      router.push("/homepage");
   }, []);
 
   const defaultLoginInput = {
@@ -69,7 +72,6 @@ export default function Home() {
 
           <div className="mt-4 card-actions justify-end">
             <button className="btn btn-primary" onClick={() => {
-              dispatch(loginRequest(inputLogin));
               setInputLogin(defaultLoginInput);
               router.push("/homepage");
             }}>Login</button>
